@@ -1,0 +1,3 @@
+python-telegram-bot
+requests
+flask  # (If you're using a web server for keep-alive)
