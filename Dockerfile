@@ -17,9 +17,8 @@ RUN wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | gpg --dearm
     apt-get update && \
     apt-get install -y google-chrome-stable
 
-# Install ChromeDriver
-RUN CHROME_VERSION=$(google-chrome --version | awk '{print $3}') && \
-    wget -q "https://chromedriver.storage.googleapis.com/$CHROME_VERSION/chromedriver_linux64.zip" -O chromedriver.zip && \
+# Install a specific version of ChromeDriver (Ensure it's compatible with Chrome)
+RUN wget -q "https://chromedriver.storage.googleapis.com/114.0.5735.90/chromedriver_linux64.zip" -O chromedriver.zip && \
     unzip chromedriver.zip && \
     chmod +x chromedriver && \
     mv chromedriver /usr/local/bin/ && \
@@ -28,10 +27,10 @@ RUN CHROME_VERSION=$(google-chrome --version | awk '{print $3}') && \
 # Copy project files
 COPY . .
 
-# Install dependencies
+# Install Python dependencies
 RUN pip install --no-cache-dir -r requirements.txt && pip install selenium webdriver-manager chromedriver-autoinstaller
 
-# Expose the port (if needed for Telegram bot)
+# Expose port (if needed for Telegram bot)
 EXPOSE 8080
 
 # Start the bot
