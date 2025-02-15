@@ -9,8 +9,10 @@ RUN apt-get update && apt-get install -y \
     wget \
     curl \
     unzip \
-    google-chrome-stable && \
-    CHROME_VERSION=$(google-chrome --version | awk '{print $3}') && \
+    google-chrome-stable
+
+# Install ChromeDriver
+RUN CHROME_VERSION=$(google-chrome --version | awk '{print $3}') && \
     wget -q "https://chromedriver.storage.googleapis.com/$CHROME_VERSION/chromedriver_linux64.zip" -O chromedriver.zip && \
     unzip chromedriver.zip && \
     chmod +x chromedriver && \
@@ -20,10 +22,10 @@ RUN apt-get update && apt-get install -y \
 # Copy project files
 COPY . .
 
-# Install Python dependencies
+# Install dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Expose a port (if needed for webhook-based Telegram bot)
+# Expose the port (for Telegram Webhook, if needed)
 EXPOSE 8080
 
 # Start the bot

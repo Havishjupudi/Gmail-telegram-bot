@@ -1,6 +1,7 @@
 import time
 import random
 import string
+import chromedriver_autoinstaller
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.service import Service
@@ -11,19 +12,24 @@ from webdriver_manager.chrome import ChromeDriverManager
 from telegram import Update, MessageReactionUpdated
 from telegram.ext import Application, CommandHandler, MessageHandler, CallbackContext, filters
 
-# Your Telegram Bot Token
+# Your Telegram Bot Token & Group ID
 TOKEN = "7847989857:AAFC5poynH1BAUQ1n3Gl5TBjLzPkmCOsLlM"
 GROUP_ID = -4770819017  # Replace with your Telegram group ID
 
 # Function to check Gmail availability
 def check_gmail(username):
     """Check if a Gmail username is available."""
+    chromedriver_autoinstaller.install()  # Auto-install Chromedriver
+
     options = Options()
-    options.add_argument("--headless")  # Run in headless mode
-    options.add_argument("--disable-gpu")  # Fix issues on some systems
+    options.add_argument("--headless")  # Run in headless mode for deployment
+    options.add_argument("--no-sandbox")  # Bypass OS-level security
+    options.add_argument("--disable-dev-shm-usage")  # Prevent shared memory issues
+    options.add_argument("--disable-gpu")  # Needed for some cloud environments
     options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36")
 
-    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
+    service = Service(ChromeDriverManager().install())
+    driver = webdriver.Chrome(service=service, options=options)
 
     try:
         driver.get("https://accounts.google.com/signup/v2/webcreateaccount")
