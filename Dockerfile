@@ -23,9 +23,9 @@ RUN CHROME_VERSION=$(google-chrome --version | awk '{print $3}') && \
 COPY . .
 
 # Install dependencies
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt && pip install selenium webdriver-manager chromedriver-autoinstaller
 
-# Expose the port (for Telegram Webhook, if needed)
+# Expose the port (if needed for Telegram bot)
 EXPOSE 8080
 
 # Start the bot
