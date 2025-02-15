@@ -4,12 +4,18 @@ FROM python:3.12
 # Set the working directory
 WORKDIR /app
 
-# Install system dependencies for Chrome & ChromeDriver
+# Install system dependencies
 RUN apt-get update && apt-get install -y \
     wget \
     curl \
     unzip \
-    google-chrome-stable
+    gnupg
+
+# Add Google Chrome repository & install Chrome
+RUN wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | gpg --dearmor > /usr/share/keyrings/google-chrome-keyring.gpg && \
+    echo 'deb [signed-by=/usr/share/keyrings/google-chrome-keyring.gpg] http://dl.google.com/linux/chrome/deb/ stable main' | tee /etc/apt/sources.list.d/google-chrome.list && \
+    apt-get update && \
+    apt-get install -y google-chrome-stable
 
 # Install ChromeDriver
 RUN CHROME_VERSION=$(google-chrome --version | awk '{print $3}') && \
@@ -22,10 +28,10 @@ RUN CHROME_VERSION=$(google-chrome --version | awk '{print $3}') && \
 # Copy project files
 COPY . .
 
-# Install dependencies (Force reinstall Selenium)
-RUN pip install --no-cache-dir -r requirements.txt && pip install --upgrade --force-reinstall selenium webdriver-manager chromedriver-autoinstaller
+# Install dependencies
+RUN pip install --no-cache-dir -r requirements.txt && pip install selenium webdriver-manager chromedriver-autoinstaller
 
-# Expose the port (for Telegram bot, if needed)
+# Expose the port (if needed for Telegram bot)
 EXPOSE 8080
 
 # Start the bot
