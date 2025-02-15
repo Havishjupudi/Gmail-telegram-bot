@@ -40,3 +40,4 @@ websocket-client==1.8.0
 wsproto==1.2.0
 selenium 
 chromedriver-autoinstaller 
+"selenium\nwebdriver-manager\nundetected-chromedriver" 
