@@ -20,10 +20,10 @@ RUN apt-get update && apt-get install -y \
 # Copy project files
 COPY . .
 
-# Install dependencies
+# Install Python dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Expose port (if required for Telegram bot)
+# Expose a port (if needed for webhook-based Telegram bot)
 EXPOSE 8080
 
 # Start the bot
